@@ -1,0 +1,831 @@
+---
+
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Mendoza</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Anton&family=Imperial+Script&display=swap" rel="stylesheet">
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			html, body {
+				background: #000;
+				color: #fff;
+				font-family: 'Anton', sans-serif;
+				overflow-x: hidden;
+			}
+
+			.name-section {
+				height: 100vh;
+				position: relative;
+			}
+
+			.name-sticky {
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+				position: relative;
+			}
+
+			.video-bg {
+				position: absolute;
+				inset: 0;
+				overflow: hidden;
+				pointer-events: none;
+				z-index: 0;
+				opacity: 0.4;
+			}
+
+			.video-bg iframe {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				width: 120vw;
+				height: 120vh;
+				min-width: 120vw;
+				min-height: 120vh;
+				transform: translate(-50%, -50%);
+				border: 0;
+			}
+
+			.name-container {
+				position: relative;
+				z-index: 1;
+				text-align: center;
+				white-space: nowrap;
+				transform-origin: 55% 30%;
+			}
+
+			.subtitle {
+				font-family: 'Imperial Script', cursive;
+				font-size: clamp(2rem, 4vw, 4rem);
+				font-weight: 400;
+				opacity: 0.8;
+				text-align: left;
+				margin-bottom: -0.3em;
+				margin-left: -0.5em;
+			}
+
+			.subtitle-bottom {
+				text-align: right;
+				margin-bottom: 0;
+				margin-top: -0.3em;
+				margin-left: 0;
+				margin-right: -0.5em;
+			}
+
+			.name-line {
+				font-size: clamp(4rem, 10vw, 10rem);
+				font-weight: 900;
+				text-transform: uppercase;
+				line-height: 1.1;
+				letter-spacing: 0.05em;
+			}
+
+			.white-flash {
+				position: fixed;
+				inset: 0;
+				background: #fff;
+				opacity: 0;
+				pointer-events: none;
+				z-index: 10;
+			}
+
+			/* --- Fullscreen image (comentado) ---
+			.fullscreen-image {
+				position: fixed;
+				inset: 0;
+				z-index: 5;
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			.fullscreen-image img {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				opacity: 0;
+				transition: opacity 0.6s ease;
+			}
+
+			.fullscreen-image img.active {
+				opacity: 1;
+			}
+			--- */
+
+			/* Content carousel section */
+			.content-section {
+				background: #fff;
+				color: #000;
+				min-height: 100vh;
+				position: relative;
+			}
+
+			.content-pin {
+				height: 100vh;
+				display: flex;
+				align-items: flex-start;
+				justify-content: center;
+				padding: 6rem 2rem 3rem;
+				overflow: hidden;
+			}
+
+			.content-wrapper {
+				max-width: 1200px;
+				width: 100%;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 4rem;
+				align-items: center;
+				position: relative;
+			}
+
+			.content-text {
+				position: relative;
+			}
+
+			.content-text h2 {
+				font-family: 'Anton', sans-serif;
+				font-size: clamp(2.5rem, 5vw, 4rem);
+				text-transform: uppercase;
+				line-height: 1.1;
+				margin-bottom: 1.5rem;
+			}
+
+			.content-text p {
+				font-family: system-ui, -apple-system, sans-serif;
+				font-size: clamp(1rem, 1.5vw, 1.2rem);
+				line-height: 1.8;
+				opacity: 0.6;
+				font-weight: 300;
+			}
+
+			/* Text blocks: first on the left, second on the right */
+			.text-first {
+				grid-column: 1;
+				grid-row: 1;
+			}
+
+			.text-second {
+				grid-column: 2;
+				grid-row: 1;
+				opacity: 0;
+			}
+
+			/* Image container slides between columns */
+			.content-image {
+				grid-column: 2;
+				grid-row: 1;
+				width: 100%;
+				aspect-ratio: 3 / 4;
+				overflow: hidden;
+				border-radius: 0.5rem;
+				position: relative;
+			}
+
+			.content-image img {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.content-image .img-second {
+				opacity: 0;
+			}
+
+			@media (max-width: 768px) {
+				.content-wrapper {
+					grid-template-columns: 1fr;
+					gap: 2rem;
+				}
+			}
+
+			/* Cards + Finale unified section */
+			.cards-finale-section {
+				position: relative;
+				z-index: 6;
+				height: 100vh;
+			}
+
+			.cards-finale-pin {
+				height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 4rem 2rem;
+				position: relative;
+				background: transparent;
+			}
+
+			.finale-bg {
+				position: absolute;
+				inset: 0;
+				background: #fff;
+				z-index: 0;
+			}
+
+			/* --- Cards (comentado) ---
+			.cards-grid {
+				position: relative;
+				z-index: 2;
+				max-width: 1200px;
+				width: 100%;
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1.5rem;
+			}
+
+			.card {
+				background: rgba(0, 0, 0, 0.6);
+				backdrop-filter: blur(10px);
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				border-radius: 1rem;
+				padding: 2rem;
+				color: #fff;
+				cursor: pointer;
+				transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+			}
+
+			.card:hover {
+				background: rgba(255, 255, 255, 0.15);
+				border-color: rgba(255, 255, 255, 0.4);
+				transform: translateY(-4px);
+			}
+
+			.card h3 {
+				font-family: 'Anton', sans-serif;
+				font-size: clamp(1.2rem, 2vw, 1.6rem);
+				text-transform: uppercase;
+				margin-bottom: 0.8rem;
+			}
+
+			.card p {
+				font-family: system-ui, -apple-system, sans-serif;
+				font-size: clamp(0.85rem, 1.2vw, 1rem);
+				line-height: 1.6;
+				opacity: 0.7;
+				font-weight: 300;
+			}
+
+			@media (max-width: 768px) {
+				.cards-grid {
+					grid-template-columns: 1fr 1fr;
+				}
+			}
+
+			@media (max-width: 480px) {
+				.cards-grid {
+					grid-template-columns: 1fr;
+				}
+			}
+			--- */
+
+			.finale-content {
+				position: absolute;
+				inset: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: clamp(2rem, 5vw, 6rem);
+				pointer-events: none;
+				z-index: 1;
+				opacity: 0;
+			}
+
+			.clipped-text {
+				font-family: 'Anton', sans-serif;
+				font-size: clamp(5rem, 12vw, 12rem);
+				font-weight: 900;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				line-height: 1;
+				text-align: center;
+				background-image: url('/mendoza2.jpg');
+				background-size: cover;
+				background-position: center;
+				-webkit-background-clip: text;
+				background-clip: text;
+				color: transparent;
+			}
+
+			.finale-left {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.finale-info {
+				opacity: 0;
+				max-width: 500px;
+				margin-top: 1.5rem;
+			}
+
+			.finale-info h3 {
+				font-family: 'Anton', sans-serif;
+				font-size: clamp(1.2rem, 2vw, 1.8rem);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: #222;
+				margin-bottom: 0.8rem;
+			}
+
+			.finale-info p {
+				font-family: system-ui, -apple-system, sans-serif;
+				font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+				line-height: 1.7;
+				color: #555;
+				font-weight: 300;
+			}
+
+			.mendoza-map {
+				width: clamp(250px, 30vw, 450px);
+				flex-shrink: 0;
+				position: relative;
+				pointer-events: all;
+			}
+
+			.mendoza-map svg {
+				width: 100%;
+				height: auto;
+				position: relative;
+				z-index: 1;
+			}
+
+			.map-glow {
+				display: none;
+			}
+
+			.map-region {
+				fill: none;
+				stroke: #222;
+				stroke-width: 1.2;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
+
+			@media (max-width: 768px) {
+				.finale-content {
+					flex-direction: column;
+					gap: 1rem;
+				}
+
+				.mendoza-map {
+					width: clamp(120px, 40vw, 200px);
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="white-flash"></div>
+		<!-- Fullscreen image (comentado)
+		<div class="fullscreen-image">
+			<img src="/mendoza2.jpg" alt="Default" class="active" />
+			<img src="/vendimia.jpg" alt="Vendimia" data-card="0" />
+			<img src="/aconcagua.jpg" alt="Aconcagua" data-card="1" />
+			<img src="/rutadelvino.jpg" alt="Ruta del Vino" data-card="2" />
+			<img src="/termas.jpg" alt="Termas" data-card="3" />
+		</div>
+	-->
+
+		<section class="name-section">
+			<div class="name-sticky">
+				<div class="video-bg">
+					<iframe
+						src="https://www.youtube.com/embed/BDZtDJpIsiw?autoplay=1&mute=1&loop=1&playlist=BDZtDJpIsiw&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&disablekb=1&start=60"
+						allow="autoplay; encrypted-media"
+						allowfullscreen
+					></iframe>
+				</div>
+				<div class="name-container">
+					<div class="subtitle">Veni a conocer</div>
+					<div class="name-line">MENDOZA</div>
+					<div class="subtitle subtitle-bottom">Argentina</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="content-section">
+			<div class="content-pin">
+				<div class="content-wrapper">
+					<div class="content-text text-first">
+						<h2>Tierra del sol y del buen vino</h2>
+						<p>Mendoza es el corazón vitivinícola de Argentina, rodeada por la imponente Cordillera de los Andes. Un destino donde la naturaleza, la aventura y la gastronomía se encuentran en cada rincón.</p>
+					</div>
+
+					<div class="content-text text-second">
+						<h2>Aventura en los Andes</h2>
+						<p>Desde el Aconcagua hasta los valles de Uspallata, Mendoza ofrece paisajes que quitan el aliento. Rafting, trekking, cabalgatas y termas naturales te esperan entre montañas y ríos.</p>
+					</div>
+
+					<div class="content-image">
+						<img class="img-first" src="/mendoza.jpg" alt="Mendoza, Argentina" />
+						<img class="img-second" src="/mendoza2.jpg" alt="Andes, Mendoza" />
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="cards-finale-section">
+			<div class="cards-finale-pin">
+				<div class="finale-bg"></div>
+				<!-- Cards (comentado)
+				<div class="cards-grid">
+					<div class="card">
+						<h3>Vendimia</h3>
+						<p>Cada marzo, Mendoza celebra la Fiesta Nacional de la Vendimia, el festival más grande de Argentina dedicado a la cosecha de la uva.</p>
+					</div>
+					<div class="card">
+						<h3>Aconcagua</h3>
+						<p>Con 6.962 metros, el Cerro Aconcagua es la montaña más alta de América y uno de los destinos de montañismo más desafiantes del mundo.</p>
+					</div>
+					<div class="card">
+						<h3>Ruta del Vino</h3>
+						<p>Más de 1.200 bodegas se distribuyen entre Luján de Cuyo, Valle de Uco y Maipú, con el Malbec como cepa insignia.</p>
+					</div>
+					<div class="card">
+						<h3>Termas</h3>
+						<p>Las termas de Cacheuta y Villavicencio ofrecen aguas termales naturales rodeadas de paisajes de montaña únicos.</p>
+					</div>
+				</div>
+			-->
+				<div class="finale-content">
+				<div class="finale-left">
+					<div class="clipped-text">MENDOZA</div>
+					<div class="finale-info">
+						<h3>Provincia de Mendoza</h3>
+						<p>Ubicada al pie de la Cordillera de los Andes, Mendoza es la principal región vitivinícola de Sudamérica. Con más de 300 días de sol al año, sus paisajes van desde viñedos infinitos hasta cumbres nevadas de más de 6.000 metros.</p>
+					</div>
+				</div>
+				<div class="mendoza-map">
+					<div class="map-glow"></div>
+					<svg class="mendoza-svg" viewBox="0 0 315 450" xmlns="http://www.w3.org/2000/svg">
+					</svg>
+				</div>
+			</div>
+			</div>
+		</section>
+
+		<script>
+			import Lenis from 'lenis';
+			import 'lenis/dist/lenis.css';
+			import { gsap } from 'gsap';
+			import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+			gsap.registerPlugin(ScrollTrigger);
+
+			const lenis = new Lenis();
+
+			lenis.on('scroll', ScrollTrigger.update);
+			gsap.ticker.add((time) => {
+				lenis.raf(time * 1000);
+			});
+			gsap.ticker.lagSmoothing(0);
+
+			const container = document.querySelector('.name-container') as HTMLElement;
+			const flash = document.querySelector('.white-flash') as HTMLElement;
+
+			// --- Zoom timeline ---
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: '.name-section',
+					start: 'top top',
+					end: '+=80%',
+					scrub: 1,
+					pin: true,
+				},
+			});
+
+			tl.to(container, { scale: 1, duration: 0.1 });
+			tl.to(container, { scale: 200, duration: 0.8, ease: 'power2.in' });
+			tl.to(flash, { opacity: 1, duration: 0.1, ease: 'none' }, 0.8);
+			tl.to(flash, { opacity: 0, duration: 0.1, ease: 'none' }, 0.9);
+
+			// --- Content carousel timeline ---
+			const textFirst = document.querySelector('.text-first') as HTMLElement;
+			const textSecond = document.querySelector('.text-second') as HTMLElement;
+			const imgFirst = document.querySelector('.img-first') as HTMLElement;
+			const imgSecond = document.querySelector('.img-second') as HTMLElement;
+			const contentImage = document.querySelector('.content-image') as HTMLElement;
+
+			const tl2 = gsap.timeline({
+				scrollTrigger: {
+					trigger: '.content-section',
+					start: 'top top',
+					end: '+=200%',
+					scrub: 1,
+					pin: true,
+				},
+			});
+
+			// 0-15%: everything sits still
+			tl2.to(textFirst, { opacity: 1, duration: 0.15 });
+
+			// 15-45%: text fades out, image slides left, swaps, second text appears
+			tl2.to(textFirst, { opacity: 0, y: -30, duration: 0.3, ease: 'power2.in' });
+			tl2.to(contentImage, {
+				x: () => -(contentImage.offsetLeft - textFirst.offsetLeft),
+				duration: 0.3,
+				ease: 'power2.inOut',
+			}, '<');
+			tl2.to(imgFirst, { opacity: 0, duration: 0.3 }, '<');
+			tl2.to(imgSecond, { opacity: 1, duration: 0.3 }, '<');
+			tl2.to(textSecond, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }, '<+=0.1');
+
+			// 45-70%: pause to read
+			tl2.to(textSecond, { opacity: 1, duration: 0.25 });
+
+			// 70-85%: second text fades out
+			tl2.to(textSecond, { opacity: 0, y: -30, duration: 0.15, ease: 'power2.in' });
+			tl2.to(contentImage, { opacity: 0, duration: 0.15, ease: 'power2.in' }, '<');
+
+			// --- Cards + Finale: one continuous pinned timeline ---
+			// const cardsGrid = document.querySelector('.cards-grid') as HTMLElement;
+			const finaleContent = document.querySelector('.finale-content') as HTMLElement;
+			const finaleBg = document.querySelector('.finale-bg') as HTMLElement;
+			const clippedText = document.querySelector('.clipped-text') as HTMLElement;
+			const finaleInfo = document.querySelector('.finale-info') as HTMLElement;
+			const mendozaSvg = document.querySelector('.mendoza-svg') as SVGSVGElement;
+			const mapGlow = document.querySelector('.map-glow') as HTMLElement;
+
+			// Load all region paths from the SVG file
+			const svgResponse = await fetch('/mendoza_lineas_uniformes.svg');
+			const svgText = await svgResponse.text();
+			const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+			const sourcePaths = svgDoc.querySelectorAll('path');
+
+			// Region data for clickable zones (regions 1-5 are zones, 6-8 are dividing lines)
+			const regionData = [
+				{ name: 'Alta Montaña', desc: 'Los picos más altos de América, el Aconcagua y el Cordón del Plata. Paisajes incomparables, el dique de Potrerillos y el Valle de Uspallata. Hitos históricos y monumentos naturales, el Cristo Redentor y Puente del Inca. Ríos, cascadas y deportes de aventura.', color: [220, 170, 120], img: '/aconcagua.jpg' },
+				{ name: 'Gran Mendoza', desc: 'Circuitos de turismo cultural, religioso, histórico y patrimonial. Museos, salas de arte, enotecas. Centro urbano y comercial, grandes hoteles y zonas gastronómicas.', color: [240, 200, 90], img: '/ciudad.jpg' },
+				{ name: ' Zona Este', desc: 'El corazón urbano y productivo de la provincia. Bodegas históricas, la Fiesta de la Vendimia y la vibrante vida cultural de la ciudad capital.', color: [170, 130, 210], img: '/este.png' },
+				{ name: 'Valle de Uco', desc: 'La joya vitivinícola de Argentina. Tupungato, Tunuyán y San Carlos ofrecen viñedos de altura, bodegas de clase mundial y vistas imponentes de los Andes.', color: [120, 200, 150], img: '/uco.webp' },
+				{ name: 'Sur', desc: 'San Rafael, General Alvear y Malargüe. Cañones, cavernas, la Laguna del Diamante y la reserva La Payunia con su paisaje volcánico lunar.', color: [210, 120, 120], img: '/mendoza.jpg' },
+			];
+
+			// Color helpers
+			const rgbaFill = (rgb: number[], a: number) => `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${a})`;
+			const baseAlpha = 0.35;
+			const hoverAlpha = 0.5;
+			const activeAlpha = 0.7;
+
+			// Create paths for each region
+			const regionPaths: SVGPathElement[] = [];
+			const regionAreas: number[] = [];
+			sourcePaths.forEach((sp, index) => {
+				if (index >= 5) return; // skip dividing lines 6-8
+				const newPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+				newPath.setAttribute('d', sp.getAttribute('d')!);
+				newPath.setAttribute('fill', rgbaFill(regionData[index].color, baseAlpha));
+				newPath.setAttribute('stroke', 'none');
+				newPath.style.transition = 'fill 0.3s ease';
+				newPath.style.pointerEvents = 'none';
+				mendozaSvg.appendChild(newPath);
+				const bbox = newPath.getBBox();
+				regionPaths.push(newPath);
+				regionAreas.push(bbox.width * bbox.height);
+			});
+
+			// Create background image overlays for each region inside finale-bg
+			const regionBgOverlays: HTMLDivElement[] = regionData.map((rd) => {
+				const overlay = document.createElement('div');
+				overlay.style.cssText = `position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,0.55),rgba(0,0,0,0.55)),url('${rd.img}') center/cover no-repeat;opacity:0;transition:opacity 0.5s ease;`;
+				finaleBg.appendChild(overlay);
+				return overlay;
+			});
+
+			// Hit-test rect behind all paths so SVG receives mouse events
+			const hitRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+			hitRect.setAttribute('width', '315');
+			hitRect.setAttribute('height', '450');
+			hitRect.setAttribute('fill', 'transparent');
+			mendozaSvg.insertBefore(hitRect, mendozaSvg.firstChild);
+
+			// Setup draw animation for each region
+			regionPaths.forEach((path) => {
+				const len = path.getTotalLength();
+				gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+			});
+			gsap.set(finaleInfo, { y: 20 });
+
+			let maxProgress = 0;
+			const tl3 = gsap.timeline({ paused: true });
+
+			ScrollTrigger.create({
+				trigger: '.cards-finale-section',
+				start: 'top top',
+				end: '+=500%',
+				pin: true,
+				onUpdate: (self) => {
+					if (self.progress > maxProgress) {
+						maxProgress = self.progress;
+						gsap.to(tl3, { progress: maxProgress, duration: 0.4, overwrite: true, ease: 'none' });
+					}
+				},
+			});
+
+			/* Cards timeline (comentado)
+			tl3.to(cardsGrid, { opacity: 1, duration: 0.10 });
+			tl3.to(cardsGrid, { opacity: 0, y: -60, pointerEvents: 'none', duration: 0.10, ease: 'power2.in' });
+			*/
+			/* Cards + fullscreenImg timeline (comentado)
+			tl3.to(finaleBg, { opacity: 1, duration: 0.10, ease: 'none' });
+			tl3.to(fullscreenImg, { zIndex: 20, duration: 0.01 }, '<');
+			tl3.to(fullscreenImg, { scale: 0.6, opacity: 0, pointerEvents: 'none', duration: 0.12, ease: 'power2.inOut' });
+			*/
+
+			// 0-20%: finale content fades in
+			tl3.to(finaleContent, {
+				opacity: 1,
+				pointerEvents: 'auto',
+				duration: 0.20,
+				ease: 'power2.inOut',
+			});
+
+			// 32-80%: Regions draw one by one + title moves up + info fades in
+			const drawDuration = 0.48;
+			const perRegion = drawDuration / regionPaths.length;
+			regionPaths.forEach((path, i) => {
+				const offset = 0.32 + i * perRegion;
+				tl3.to(path, {
+					strokeDashoffset: 0,
+					duration: perRegion,
+					ease: 'none',
+				}, offset);
+			});
+			// Title and info animate during the first few regions
+			tl3.to(clippedText, {
+				y: -40,
+				duration: 0.15,
+				ease: 'power2.out',
+			}, 0.32);
+			tl3.to(finaleInfo, {
+				opacity: 1,
+				y: 0,
+				duration: 0.15,
+				ease: 'power2.out',
+			}, 0.37);
+
+			// 80-100%: hold on final state
+			tl3.to(finaleContent, { opacity: 1, duration: 0.20 });
+
+			// --- SVG-level hit detection using ray-casting ---
+			function getSVGPoint(e: MouseEvent): { x: number; y: number } {
+				const pt = mendozaSvg.createSVGPoint();
+				pt.x = e.clientX;
+				pt.y = e.clientY;
+				const svgPt = pt.matrixTransform(mendozaSvg.getScreenCTM()!.inverse());
+				return { x: svgPt.x, y: svgPt.y };
+			}
+
+			// Parse polygon vertices from path "d" attribute (M x,y L x,y ... Z)
+			const regionPolygons: [number, number][][] = regionPaths.map((path) => {
+				const d = path.getAttribute('d') || '';
+				const verts: [number, number][] = [];
+				const re = /[ML]\s*(-?\d+),(-?\d+)/g;
+				let m;
+				while ((m = re.exec(d)) !== null) {
+					verts.push([parseInt(m[1]), parseInt(m[2])]);
+				}
+				return verts;
+			});
+
+			// Ray-casting point-in-polygon
+			function pointInPoly(px: number, py: number, verts: [number, number][]): boolean {
+				let inside = false;
+				for (let i = 0, j = verts.length - 1; i < verts.length; j = i++) {
+					const yi = verts[i][1], yj = verts[j][1];
+					const xi = verts[i][0], xj = verts[j][0];
+					if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) {
+						inside = !inside;
+					}
+				}
+				return inside;
+			}
+
+			function getRegionAtPoint(pt: { x: number; y: number }): number | null {
+				let best: number | null = null;
+				let bestArea = Infinity;
+				for (let i = 0; i < regionPolygons.length; i++) {
+					if (pointInPoly(pt.x, pt.y, regionPolygons[i])) {
+						if (regionAreas[i] < bestArea) {
+							bestArea = regionAreas[i];
+							best = i;
+						}
+					}
+				}
+				return best;
+			}
+
+			// --- Region click: update info text ---
+			const infoH3 = finaleInfo.querySelector('h3') as HTMLElement;
+			const infoP = finaleInfo.querySelector('p') as HTMLElement;
+			const defaultH3 = infoH3.textContent!;
+			const defaultP = infoP.textContent!;
+			let activeRegion: number | null = null;
+			let hoveredRegion: number | null = null;
+
+			mendozaSvg.addEventListener('click', (e) => {
+				const region = getRegionAtPoint(getSVGPoint(e));
+				if (region === null) return;
+
+				if (activeRegion === region) {
+					// Deselect: restore defaults
+					activeRegion = null;
+					regionPaths.forEach((p, j) => p.setAttribute('fill', rgbaFill(regionData[j].color, baseAlpha)));
+					// Show MENDOZA title again, hide glow
+					gsap.to(clippedText, { opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' });
+					gsap.to(mapGlow, { opacity: 0, duration: 0.4 });
+					// Text back to dark
+					gsap.to(infoH3, { opacity: 0, duration: 0.15, onComplete: () => {
+						infoH3.textContent = defaultH3;
+						infoH3.style.color = '#222';
+						gsap.to(infoH3, { opacity: 1, duration: 0.15 });
+					}});
+					gsap.to(infoP, { opacity: 0, duration: 0.15, onComplete: () => {
+						infoP.textContent = defaultP;
+						infoP.style.color = '#555';
+						gsap.to(infoP, { opacity: 1, duration: 0.15 });
+					}});
+					// Fade out all bg overlays
+					regionBgOverlays.forEach((ov) => gsap.to(ov, { opacity: 0, duration: 0.5 }));
+				} else {
+					activeRegion = region;
+					regionPaths.forEach((p, j) => p.setAttribute('fill', rgbaFill(regionData[j].color, j === region ? activeAlpha : baseAlpha)));
+					// Hide MENDOZA title, show glow
+					gsap.to(clippedText, { opacity: 0, scale: 0.95, duration: 0.3, ease: 'power2.in' });
+					gsap.to(mapGlow, { opacity: 1, duration: 0.4 });
+					// Text to white
+					gsap.to(infoH3, { opacity: 0, duration: 0.15, onComplete: () => {
+						infoH3.textContent = regionData[region].name;
+						infoH3.style.color = '#fff';
+						gsap.to(infoH3, { opacity: 1, duration: 0.15 });
+					}});
+					gsap.to(infoP, { opacity: 0, duration: 0.15, onComplete: () => {
+						infoP.textContent = regionData[region].desc;
+						infoP.style.color = 'rgba(255,255,255,0.85)';
+						gsap.to(infoP, { opacity: 1, duration: 0.15 });
+					}});
+					// Crossfade bg overlays: show selected, hide others
+					regionBgOverlays.forEach((ov, j) => gsap.to(ov, { opacity: j === region ? 1 : 0, duration: 0.5 }));
+				}
+			});
+
+			mendozaSvg.addEventListener('mousemove', (e) => {
+				const region = getRegionAtPoint(getSVGPoint(e));
+				if (region !== hoveredRegion) {
+					if (hoveredRegion !== null && hoveredRegion !== activeRegion) {
+						regionPaths[hoveredRegion].setAttribute('fill', rgbaFill(regionData[hoveredRegion].color, baseAlpha));
+					}
+					if (region !== null && region !== activeRegion) {
+						regionPaths[region].setAttribute('fill', rgbaFill(regionData[region].color, hoverAlpha));
+					}
+					hoveredRegion = region;
+					mendozaSvg.style.cursor = region !== null ? 'pointer' : 'default';
+				}
+			});
+
+			mendozaSvg.addEventListener('mouseleave', () => {
+				if (hoveredRegion !== null && hoveredRegion !== activeRegion) {
+					regionPaths[hoveredRegion].setAttribute('fill', rgbaFill(regionData[hoveredRegion].color, baseAlpha));
+				}
+				hoveredRegion = null;
+				mendozaSvg.style.cursor = 'default';
+			});
+
+			/* Cards hover (comentado)
+			const cards = document.querySelectorAll('.card');
+			const bgImages = fullscreenImg.querySelectorAll('img');
+			const defaultBg = fullscreenImg.querySelector('img.active') as HTMLElement;
+
+			cards.forEach((card, i) => {
+				card.addEventListener('mouseenter', () => {
+					bgImages.forEach(img => img.classList.remove('active'));
+					const target = fullscreenImg.querySelector(`img[data-card="${i}"]`);
+					if (target) target.classList.add('active');
+				});
+
+				card.addEventListener('mouseleave', () => {
+					bgImages.forEach(img => img.classList.remove('active'));
+					defaultBg.classList.add('active');
+				});
+			});
+			*/
+		</script>
+	</body>
+</html>
