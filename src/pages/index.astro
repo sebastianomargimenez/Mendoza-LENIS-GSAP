@@ -316,7 +316,6 @@
 				letter-spacing: 0.05em;
 				line-height: 1;
 				text-align: center;
-				background-image: url('/mendoza2.jpg');
 				background-size: cover;
 				background-position: center;
 				-webkit-background-clip: text;
@@ -434,8 +433,8 @@
 					</div>
 
 					<div class="content-image">
-						<img class="img-first" src="/mendoza.jpg" alt="Mendoza, Argentina" />
-						<img class="img-second" src="/mendoza2.jpg" alt="Andes, Mendoza" />
+						<img class="img-first" src={`${import.meta.env.BASE_URL}mendoza.jpg`} alt="Mendoza, Argentina" />
+						<img class="img-second" src={`${import.meta.env.BASE_URL}mendoza2.jpg`} alt="Andes, Mendoza" />
 					</div>
 				</div>
 			</div>
@@ -466,7 +465,7 @@
 			-->
 				<div class="finale-content">
 				<div class="finale-left">
-					<div class="clipped-text">MENDOZA</div>
+					<div class="clipped-text" style={`background-image: url('${import.meta.env.BASE_URL}mendoza2.jpg')`}>MENDOZA</div>
 					<div class="finale-info">
 						<h3>Provincia de Mendoza</h3>
 						<p>Ubicada al pie de la Cordillera de los Andes, Mendoza es la principal región vitivinícola de Sudamérica. Con más de 300 días de sol al año, sus paisajes van desde viñedos infinitos hasta cumbres nevadas de más de 6.000 metros.</p>
@@ -488,6 +487,8 @@
 			import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 			gsap.registerPlugin(ScrollTrigger);
+
+			const BASE = import.meta.env.BASE_URL;
 
 			const lenis = new Lenis();
 
@@ -564,18 +565,18 @@
 			const mapGlow = document.querySelector('.map-glow') as HTMLElement;
 
 			// Load all region paths from the SVG file
-			const svgResponse = await fetch('/mendoza_lineas_uniformes.svg');
+			const svgResponse = await fetch(`${BASE}mendoza_lineas_uniformes.svg`);
 			const svgText = await svgResponse.text();
 			const svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
 			const sourcePaths = svgDoc.querySelectorAll('path');
 
 			// Region data for clickable zones (regions 1-5 are zones, 6-8 are dividing lines)
 			const regionData = [
-				{ name: 'Alta Montaña', desc: 'Los picos más altos de América, el Aconcagua y el Cordón del Plata. Paisajes incomparables, el dique de Potrerillos y el Valle de Uspallata. Hitos históricos y monumentos naturales, el Cristo Redentor y Puente del Inca. Ríos, cascadas y deportes de aventura.', color: [220, 170, 120], img: '/aconcagua.jpg' },
-				{ name: 'Gran Mendoza', desc: 'Circuitos de turismo cultural, religioso, histórico y patrimonial. Museos, salas de arte, enotecas. Centro urbano y comercial, grandes hoteles y zonas gastronómicas.', color: [240, 200, 90], img: '/ciudad.jpg' },
-				{ name: ' Zona Este', desc: 'El corazón urbano y productivo de la provincia. Bodegas históricas, la Fiesta de la Vendimia y la vibrante vida cultural de la ciudad capital.', color: [170, 130, 210], img: '/este.png' },
-				{ name: 'Valle de Uco', desc: 'La joya vitivinícola de Argentina. Tupungato, Tunuyán y San Carlos ofrecen viñedos de altura, bodegas de clase mundial y vistas imponentes de los Andes.', color: [120, 200, 150], img: '/uco.webp' },
-				{ name: 'Sur', desc: 'San Rafael, General Alvear y Malargüe. Cañones, cavernas, la Laguna del Diamante y la reserva La Payunia con su paisaje volcánico lunar.', color: [210, 120, 120], img: '/mendoza.jpg' },
+				{ name: 'Alta Montaña', desc: 'Los picos más altos de América, el Aconcagua y el Cordón del Plata. Paisajes incomparables, el dique de Potrerillos y el Valle de Uspallata. Hitos históricos y monumentos naturales, el Cristo Redentor y Puente del Inca. Ríos, cascadas y deportes de aventura.', color: [220, 170, 120], img: `${BASE}aconcagua.jpg` },
+				{ name: 'Gran Mendoza', desc: 'Circuitos de turismo cultural, religioso, histórico y patrimonial. Museos, salas de arte, enotecas. Centro urbano y comercial, grandes hoteles y zonas gastronómicas.', color: [240, 200, 90], img: `${BASE}ciudad.jpg` },
+				{ name: ' Zona Este', desc: 'El corazón urbano y productivo de la provincia. Bodegas históricas, la Fiesta de la Vendimia y la vibrante vida cultural de la ciudad capital.', color: [170, 130, 210], img: `${BASE}este.png` },
+				{ name: 'Valle de Uco', desc: 'La joya vitivinícola de Argentina. Tupungato, Tunuyán y San Carlos ofrecen viñedos de altura, bodegas de clase mundial y vistas imponentes de los Andes.', color: [120, 200, 150], img: `${BASE}uco.webp` },
+				{ name: 'Sur', desc: 'San Rafael, General Alvear y Malargüe. Cañones, cavernas, la Laguna del Diamante y la reserva La Payunia con su paisaje volcánico lunar.', color: [210, 120, 120], img: `${BASE}mendoza.jpg` },
 			];
 
 			// Color helpers
