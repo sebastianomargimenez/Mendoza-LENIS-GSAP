@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://sebastianomargimenez.github.io',
-  base: '/Mendoza-LENIS-GSAP',
+  base: process.env.GITHUB_ACTIONS ? '/Mendoza-LENIS-GSAP' : '/',
   server: {
     host: true,
   },
